@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block uploadActive %}active  {% endblock %}
+{% block content %}
+            <!-- start: Content -->
+            <div id="content">
+               <div class="panel box-shadow-none content-header">
+                  <div class="panel-body">
+                    <div class="col-md-12">
+                        <h3 class="animated fadeInLeft">Upload logs</h3>
+                        <p class="animated fadeInDown">
+                          Logs/List of all uploads
+                        </p>
+                    </div>
+                  </div>
+              </div>
+              <div class="col-md-12 top-20 padding-0">
+                <div class="col-md-12">
+                  <div class="panel">
+                    <div class="panel-body">
+                      <div class="responsive-table">
+                      <table id="datatables-example" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Name of employee</th>
+                          <th>Employee code</th>
+                          <th>Time uploaded</th>
+                          <th>Employee records uploaded</th>
+                          <th>Status</th>
+                          <th>Errors</th>
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>First name</td>
+                          <td>middle namet</td>
+                          <td>date of graduation</td>
+                          <td>Date of employment</td>
+                          <td>Position</td>
+                          <td>$Salary</td>
+                          
+                        </tr>
+                                               
+                      </tbody>
+                        </table>
+                      </div>
+                  </div>
+                </div>
+              </div>  
+              </div>
+            </div>
+          <!-- end: content -->
+
+{% endblock %}
+                
+   
