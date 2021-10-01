@@ -8,6 +8,9 @@ import random
 # Employee code is the required argument for creating supervisor
 class Supervisors(models.Model):
 	supervisor  		= models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.supervisor
 	
 	class Meta:
 		verbose_name_plural = "Supervisors"

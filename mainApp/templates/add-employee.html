@@ -24,46 +24,70 @@
                   <div class="col-md-12 panel">
                     <div class="col-md-12 panel-body" style="padding-bottom:30px;">
                       <div class="col-md-12">
-                        <form class="cmxform" id="signupForm" method="get" action="">
+                      	 {% if messages %}
+                    		{% for message in messages %}
+                        		<div  class="alert alert-{{message.tags }}" role="alert">
+                            		{{message}}
+                        		</div>
+                    		{% endfor %}
+                		{% endif %}    
+                        <form method="POST" class="cmxform" id="signupForm">
+                        	{% csrf_token %}
                           <div class="col-md-6">
                             <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="text" class="form-text" id="validate_firstname" name="validate_firstname" required>
+                              <input type="text" name="first_name" class="form-text" id="validate_firstname" required>
                               <span class="bar"></span>
-                              <label>Firstname</label>
+                              <label>First Name</label>
                             </div>
 
                             <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="text" class="form-text" id="validate_lastname" name="validate_lastname" required>
+                              <input type="text" name="middle_name" class="form-text" id="validate_lastname"  required>
                               <span class="bar"></span>
-                              <label>Lastname</label>
+                              <label>Middle Name</label>
                             </div>
 
-                            <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="text" class="form-text" id="validate_username" name="validate_username" required>
-                              <span class="bar"></span>
-                              <label>Username</label>
-                            </div>
+                                                      
+
+                            <div class="col-sm-12 padding-0" style="margin-bottom:40px !important;">
+                                  <label>Select supervisor(s)</label><br>
+                                  <select name="get_supervisor" class="form-control" multiple>
+                                  	{% for employee in employees %}
+                                    	<option value="{{employee.employee_code}}">{{employee}}</option>
+                                    {% endfor %}
+                                  </select>
+                                </div>
                           </div>
 
+
                           <div class="col-md-6">
-                            <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="password" class="form-text" id="validate_password" name="validate_password" required>
+                          	<br>
+                          	<label>Date of graduation</label><br>
+	                        <div class="form-group form-animate-text">
+	                          <input type="date" name="date_of_graduation" class="form-text dateAnimate" required>
+	                          <span class="bar"></span>
+	                        </div>
+
+	                        <label>Date of employment</label><br>
+	                        <div class="form-group form-animate-text">
+	                          <input type="date" name="date_of_employment" class="form-text dateAnimate" required>
+	                          <span class="bar"></span>
+	                        </div>
+
+	                        <div class="form-group form-animate-text" style="margin-top:40px !important;">
+                              <input type="text" class="form-text" id="validate_password" name="position" required>
                               <span class="bar"></span>
-                              <label>Password</label>
+                              <label>Position</label>
                             </div>
 
                             <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="password" class="form-text" id="validate_confirm_password" name="validate_confirm_password" required>
+                              <input type="number" class="form-text" id="validate_password" name="salary" required>
                               <span class="bar"></span>
-                              <label>Confirm Password</label>
+                              <label>Salary</label>
                             </div>
 
-                            <div class="form-group form-animate-text" style="margin-top:40px !important;">
-                              <input type="text" class="form-text" id="validate_email" name="validate_email" required>
-                              <span class="bar"></span>
-                              <label>Email</label>
-                            </div>
-                          </div>                   
+                           
+
+                          </div> 
                           <div class="col-md-12">
                               <input class="submit btn btn-success" type="submit" value="Submit">
                         </div>

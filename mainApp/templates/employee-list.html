@@ -41,7 +41,13 @@
                           <td>{{employer.date_of_employment}}</td>
                           <td>{{employer.position}}</td>
                           <td>${{employer.salary}}</td>
-                          <td>{{employees_supervisors}}</td>
+                          <td>
+                            {% for supervisor in employer.supervisors.all %}
+                                {{supervisor}}<br>
+                            {% empty %}
+                                 ---
+                            {% endfor %}
+                          </td>
                           <td>{{employer.employee_code}}</td>
                         </tr>
                         {% endfor %}
