@@ -11,7 +11,7 @@ class AdminEmployeeDisplay(admin.ModelAdmin):
 	list_filter = ["position"]
 
 class AdminUploadLogsDisplay(admin.ModelAdmin):
-	list_display = ["employee","timestamp_of_upload","status"]
+	list_display = ["timestamp_of_upload","status"]
 	
 admin.site.register(Employee, AdminEmployeeDisplay) 
 admin.site.register(UploadLogs, AdminUploadLogsDisplay)

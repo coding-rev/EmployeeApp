@@ -1,5 +1,6 @@
-from .models import Employee 
-
+from .models import Employee, Supervisors, UploadLogs 
+from openpyxl.workbook import Workbook
+from openpyxl import load_workbook
 # Logical functions
 
 def ValidateSupervisorCreation(get_employee_code):
@@ -9,3 +10,113 @@ def ValidateSupervisorCreation(get_employee_code):
 	else:
 		return None
 	
+def UploadExcelAndValidation(excel_file):
+	
+	# Load spreadsheet
+	work_book 			= load_workbook(excel_file, data_only=True)
+	
+	# Getting the active sheet
+	rows 					= work_book.active
+	total_rows				= 0
+	succesful_rows_passed	= 0
+	# Array: specifically be used for handling duplicate entries
+	duplicatedDetectArray = []
+	duplicateDetectCount  = 0 
+
+	error_message 		  = ""
+	is_error 			  = False
+	# Looping through number of individual row in total rows
+	for a_row in rows:
+		# Taking out the header in the excel file
+		if total_rows==0:
+			total_rows+=1
+			pass
+		
+		# Getting a single row's values
+		else:
+			concatenateRowValues = "".replace(' ','')
+			# Getting values from row in array
+			a_row_value_array = []
+
+			for a_row_value in a_row:
+				# appending employee a_row_value_array
+				a_row_value_array.append(a_row_value.value)
+				# Concatenating
+				concatenateRowValues+= str(a_row_value.value)
+							
+			# Checking and manipulating duplicate row data
+			exists = concatenateRowValues in duplicatedDetectArray
+			if exists ==True:
+				duplicateDetectCount+=1
+				pass
+			# Creating employee
+			else:
+				first_name 				= a_row_value_array[0]
+				middle_name 			= a_row_value_array[1]
+				date_of_graduation		= a_row_value_array[2]
+				date_of_employment 		= a_row_value_array[3]
+				position 				= a_row_value_array[4]
+				try:
+					salary 				= int(a_row_value_array[5])
+				except:
+					is_error 			= True
+					error_message	 	= "Invalid input. Salary field expected a number"
+					break
+
+				supervisors				= a_row_value_array[6]
+				
+
+				# Saving employee into database
+				try:
+					employee 				= Employee.objects.create(
+												first_name=first_name, middle_name=middle_name,
+												date_of_graduation=date_of_graduation, 
+												date_of_employment=date_of_employment, position=position,
+												salary=salary)
+					employee.save()
+
+					# If no supervisor
+					if supervisors==None:
+						pass
+					else:
+						supervisor_key_name = ValidateSupervisorCreation(supervisors)
+						# If the employee already have a supervisor account
+						if Supervisors.objects.filter(supervisor=supervisor_key_name).exists():
+							supervisor = Supervisors.objects.get(supervisor=supervisor_key_name)
+							employee.supervisors.add(supervisor)
+
+						# If the employee does not have a supervisor account
+						else:
+							supervisor = Supervisors.objects.create(supervisor=supervisor_key_name)
+							supervisor.save()
+							employee.supervisors.add(supervisor)
+
+					succesful_rows_passed+=1
+					duplicatedDetectArray.append(concatenateRowValues)
+
+				except Exception as e:
+					is_error 		= True
+					error_message 	= "Supervisor's employee code is not valid"
+					break
+
+							
+			total_rows+=1
+	# Saving and returning log
+	if is_error==False:
+		saveLog = UploadLogs.objects.create(
+					number_of_employee_records_uploaded= succesful_rows_passed,
+					status="Success")
+		saveLog.save()
+
+	else:
+		saveLog = UploadLogs.objects.create(
+					number_of_employee_records_uploaded= succesful_rows_passed,
+					status = "Failed", errors=error_message)
+		saveLog.save()
+
+	return [duplicateDetectCount, succesful_rows_passed, is_error, error_message]
+	
+
+	
+
+

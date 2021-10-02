@@ -1,11 +1,34 @@
-from django.shortcuts import render
+import os
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Employee, Supervisors
-from .backends import ValidateSupervisorCreation
+from .models import Employee, Supervisors, UploadLogs
+from .backends import ValidateSupervisorCreation, UploadExcelAndValidation
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
+def LoginView(request):
+	if request.method=='POST':
+		username 		= request.POST.get("username")
+		password 		= request.POST.get("password")
+		user 			= authenticate(request, username=username, password=password)
 
+		if user is not None:
+			login(request, user)
+			return redirect('mainApp:list-employees')
+
+		else:
+			messages.error(request, "Invalid credentials provided. Note that both fields may be case-sensitive")
+			return render(request, 'login.html')
+
+	return render(request, 'login.html')
+
+def Logout(request):
+	logout(request)
+	return redirect('/login')
+
+@login_required
 def EmployeeListView(request):
 	employees  	= Employee.objects.all().order_by('first_name')
 	context 	= {
@@ -13,7 +36,7 @@ def EmployeeListView(request):
 	}
 
 	return render(request, 'employee-list.html',context)
-
+@login_required
 def AddEmployeeView(request):
 	employees 	= Employee.objects.all()
 	context 	= {
@@ -54,7 +77,12 @@ def AddEmployeeView(request):
 						supervisor = Supervisors.objects.create(supervisor=supervisor_key_name)
 						supervisor.save()
 						employee.supervisors.add(supervisor)
-			
+
+			saveLog 		= UploadLogs.objects.create(
+								number_of_employee_records_uploaded= 1,
+								status="Success")
+			saveLog.save()
+
 			messages.success(request, "Employee added successfully")
 			return render(request, 'add-employee.html', context)
 
@@ -62,8 +90,38 @@ def AddEmployeeView(request):
 			messages.error(request, str(e))
 	return render(request, 'add-employee.html',context)
 
-def UploadLogs(request):
-	return render(request, 'employee-logs.html')
+@login_required
+def ExcelDataUploadView(request):
+	if request.method == "POST":
+		excel_file     		= request.FILES.get("employee_excel_file")
+		# Getting filename and extention
+		file_name, extention = os.path.splitext(excel_file.name)
+				
+		if '.xlsx' == extention:
+			uploadAndCheck 		= UploadExcelAndValidation(excel_file)
+			# Checking if any error occured
+			if uploadAndCheck[2]==True:
+				messages.error(request, uploadAndCheck[3])
+
+			# Valid file
+			else:
+				messages.success(request, "Employee Data uploaded successfully")
+				return render(request, "excel-file-upload.html")
+		
+		# If file wasn't a '.xlsx'
+		else:
+			messages.error(request, "Invalid file upload, please upload an excel file")
+			return render(request, 'excel-file-upload.html')
+
+	return render(request, 'excel-file-upload.html')
+
+@login_required
+def UploadLogsView(request):
+	logs 		= UploadLogs.objects.all()
+	context 	= {
+		"logs":logs
+	}
+	return render(request, 'logs.html', context)
 
 
 

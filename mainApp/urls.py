@@ -5,5 +5,9 @@ app_name = "mainApp"
 urlpatterns = [
 	path("", views.EmployeeListView ,name="list-employees"),
 	path("add-employee", views.AddEmployeeView, name="add-employee"),
-	path("upload-logs", views.UploadLogs, name="logs-employees")
+	path("upload-excel-file", views.ExcelDataUploadView, name="upload-excel"),
+	path("upload-logs", views.UploadLogsView, name="logs-employees"),
+
+	path("login/", views.LoginView, name="login"),
+	path("logout", views.Logout, name="logout")
 ]

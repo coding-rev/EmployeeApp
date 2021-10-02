@@ -18,8 +18,8 @@ class Supervisors(models.Model):
 class Employee(models.Model):
 	first_name 			= models.CharField(max_length=100)
 	middle_name			= models.CharField(max_length=100)
-	date_of_graduation 	= models.DateTimeField()
-	date_of_employment  = models.DateTimeField()
+	date_of_graduation 	= models.CharField(max_length=100)
+	date_of_employment  = models.CharField(max_length=100)
 	position 			= models.CharField(max_length=100)
 	salary 				= models.IntegerField()
 	supervisors 		= models.ManyToManyField(Supervisors, blank=True)
@@ -39,16 +39,18 @@ class Employee(models.Model):
 
 
 class UploadLogs(models.Model):
-	employee 							= models.ForeignKey(Employee, on_delete=models.CASCADE)
 	timestamp_of_upload 				= models.DateTimeField(auto_now_add=True)
 	number_of_employee_records_uploaded = models.IntegerField()
 	status 								= models.CharField(max_length=100)
 	errors 								= models.CharField(max_length=100, blank=True, null=True)
 
 	def __str__(self):
-		return f"{self.employee.employee_code}"
+		return f"{self.status}"
 
 	class Meta:
 		verbose_name_plural = "Upload logs"
+
+
+
 
 

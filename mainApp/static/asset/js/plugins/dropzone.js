@@ -109,13 +109,17 @@
     You can register an event handler like this:
     
         dropzone.on("dragEnter", function() { });
+
+        enctype="multipart/form-data"
      */
 
     Dropzone.prototype.events = ["drop", "dragstart", "dragend", "dragenter", "dragover", "dragleave", "addedfile", "addedfiles", "removedfile", "thumbnail", "error", "errormultiple", "processing", "processingmultiple", "uploadprogress", "totaluploadprogress", "sending", "sendingmultiple", "success", "successmultiple", "canceled", "canceledmultiple", "complete", "completemultiple", "reset", "maxfilesexceeded", "maxfilesreached", "queuecomplete"];
 
     Dropzone.prototype.defaultOptions = {
       url: null,
-      method: "post",
+      method: "POST",
+      enctype: "multipart/form-data",
+      name: "employee_excel_file",
       withCredentials: false,
       parallelUploads: 2,
       uploadMultiple: false,
