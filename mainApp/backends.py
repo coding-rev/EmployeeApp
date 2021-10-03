@@ -53,8 +53,18 @@ def UploadExcelAndValidation(excel_file):
 			else:
 				first_name 				= a_row_value_array[0]
 				middle_name 			= a_row_value_array[1]
-				date_of_graduation		= a_row_value_array[2]
-				date_of_employment 		= a_row_value_array[3]
+				try:
+					date_of_graduation		= a_row_value_array[2].strip('"')
+					date_of_graduation 		= date_of_graduation.strip("'")
+
+					date_of_employment 		= a_row_value_array[3].strip('"')
+					date_of_employment 		= date_of_employment.strip("'")
+					
+				except:
+					is_error 			= True
+					error_message		= "Datetime value expected. Please round your dates in column 4 and 5 in quotation marks"
+					break
+
 				position 				= a_row_value_array[4]
 				try:
 					salary 				= int(a_row_value_array[5])
@@ -96,7 +106,7 @@ def UploadExcelAndValidation(excel_file):
 
 				except Exception as e:
 					is_error 		= True
-					error_message 	= "Supervisor's employee code is not valid"
+					error_message 	= "Supervisor's employee code does not exist"
 					break
 
 							
