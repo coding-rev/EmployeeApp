@@ -35,6 +35,7 @@ def LoginView(request):
 
 	return render(request, 'login.html')
 
+@login_required
 def Logout(request):
 	logout(request)
 	return redirect('/login')
