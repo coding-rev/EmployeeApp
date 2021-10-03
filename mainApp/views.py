@@ -6,9 +6,20 @@ from .models import Employee, Supervisors, UploadLogs
 from .backends import ValidateSupervisorCreation, UploadExcelAndValidation
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 def LoginView(request):
+	# Creating superuser
+	if User.objects.filter(is_superuser=True, is_staff=True, username="admin").exists():
+		pass
+	else:
+		admin_user   	= User.objects.create(username="admin", is_superuser=True, is_staff=True)
+		admin_user.set_password("keypass")
+		admin_user.save()
+
+
 	if request.method=='POST':
 		username 		= request.POST.get("username")
 		password 		= request.POST.get("password")
@@ -80,7 +91,7 @@ def AddEmployeeView(request):
 
 			saveLog 		= UploadLogs.objects.create(
 								number_of_employee_records_uploaded= 1,
-								status="Success")
+								status="Success", number_of_duplicate_entries=0)
 			saveLog.save()
 
 			messages.success(request, "Employee added successfully")
@@ -106,7 +117,7 @@ def ExcelDataUploadView(request):
 			# Valid file
 			else:
 				messages.success(request, "Employee Data uploaded successfully")
-				return render(request, "excel-file-upload.html")
+				return render(request, 'excel-file-upload.html')
 		
 		# If file wasn't a '.xlsx'
 		else:

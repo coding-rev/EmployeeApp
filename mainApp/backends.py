@@ -105,13 +105,13 @@ def UploadExcelAndValidation(excel_file):
 	if is_error==False:
 		saveLog = UploadLogs.objects.create(
 					number_of_employee_records_uploaded= succesful_rows_passed,
-					status="Success")
+					status="Success",number_of_duplicate_entries=duplicateDetectCount)
 		saveLog.save()
 
 	else:
 		saveLog = UploadLogs.objects.create(
 					number_of_employee_records_uploaded= succesful_rows_passed,
-					status = "Failed", errors=error_message)
+					status = "Failed", errors=error_message, number_of_duplicate_entries=duplicateDetectCount)
 		saveLog.save()
 
 	return [duplicateDetectCount, succesful_rows_passed, is_error, error_message]

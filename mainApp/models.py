@@ -43,6 +43,7 @@ class UploadLogs(models.Model):
 	number_of_employee_records_uploaded = models.IntegerField()
 	status 								= models.CharField(max_length=100)
 	errors 								= models.CharField(max_length=100, blank=True, null=True)
+	number_of_duplicate_entries 		= models.IntegerField()
 
 	def __str__(self):
 		return f"{self.status}"
