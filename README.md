@@ -31,6 +31,10 @@ EMPLOYMENT DATA COLLATION APP
 	username: admin
 	password: keypass
 
+	7. Attached are the excel files for testing
+			- valid_excel     : Valid Excel file
+			- wrong_file 	  : Invalid excel file
+
 
 - URLS FOR ACCESSING THE WEB APPLICATION
 	1. LOGIN PAGE 								:  http://127.0.0.1:8000/login/

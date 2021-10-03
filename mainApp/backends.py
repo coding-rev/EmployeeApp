@@ -54,8 +54,12 @@ def UploadExcelAndValidation(excel_file):
 				first_name 				= a_row_value_array[0]
 				middle_name 			= a_row_value_array[1]
 				try:
-					date_of_graduation		= a_row_value_array[2].strip('"')
-					date_of_graduation 		= date_of_graduation.strip("'")
+					if '"' not in a_row_value_array[2] and '"' not in a_row_value_array[3]:
+						is_error 			= True
+						error_message 		= "Please round your datetimes in quotation marks"
+					else:
+						date_of_graduation		= a_row_value_array[2].strip('"')
+						date_of_graduation 		= date_of_graduation.strip("'")
 
 					date_of_employment 		= a_row_value_array[3].strip('"')
 					date_of_employment 		= date_of_employment.strip("'")
