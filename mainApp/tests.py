@@ -1,7 +1,10 @@
 import datetime
 import pytz
-from django.test import TestCase
+from django.test import TestCase, Client
+from django.urls import reverse
 from .models import Employee, Supervisors, UploadLogs
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.contrib.messages import get_messages 
 
 # Create your tests here.
 class ModelsTest(TestCase):
@@ -32,6 +35,9 @@ class ModelsTest(TestCase):
 								number_of_employee_records_uploaded=5, status="success", number_of_duplicate_entries=0)
 		log.save()
 		self.assertEqual(log.status, "success")
+
+	
+
 
 
 
