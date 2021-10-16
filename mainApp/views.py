@@ -30,7 +30,7 @@ def LoginView(request):
 			return redirect('mainApp:list-employees')
 
 		else:
-			messages.error(request, "Invalid credentials provided. Note that both fields may be case-sensitive")
+			messages.error(request, "Please enter the correct username and password. Note that both fields may be case-sensitive")
 			return render(request, 'login.html')
 
 	return render(request, 'login.html')
@@ -43,17 +43,14 @@ def Logout(request):
 @login_required
 def EmployeeListView(request):
 	employees  	= Employee.objects.all().order_by('first_name')
-	context 	= {
-		"employees":employees,
-	}
-
+	context 	= {"employees":employees}
 	return render(request, 'employee-list.html',context)
+
 @login_required
 def AddEmployeeView(request):
 	employees 	= Employee.objects.all()
-	context 	= {
-		"employees":employees
-	}
+	context 	= {"employees":employees}
+	
 	# Taking form values on post
 	if request.method =='POST':
 		first_name    				=  request.POST.get('first_name')
@@ -79,6 +76,7 @@ def AddEmployeeView(request):
 			else:
 				for supervisor_code in getSupervisors:
 					supervisor_key_name = ValidateSupervisorCreation(supervisor_code)
+					
 					# If the employee already have a supervisor account
 					if Supervisors.objects.filter(supervisor=supervisor_key_name).exists():
 						supervisor = Supervisors.objects.get(supervisor=supervisor_key_name)
@@ -105,11 +103,11 @@ def AddEmployeeView(request):
 @login_required
 def ExcelDataUploadView(request):
 	if request.method == "POST":
-		excel_file     		= request.FILES.get("employee_excel_file")
-		# Getting filename and extention
-		file_name, extention = os.path.splitext(excel_file.name)
+		excel_file     			= request.FILES.get("employee_excel_file")
+		# Getting filename and extension
+		file_name, extension 	= os.path.splitext(excel_file.name)
 				
-		if '.xlsx' == extention:
+		if '.xlsx' == extension:
 			uploadAndCheck 		= UploadExcelAndValidation(excel_file)
 			# Checking if any error occured
 			if uploadAndCheck[2]==True:
@@ -130,9 +128,7 @@ def ExcelDataUploadView(request):
 @login_required
 def UploadLogsView(request):
 	logs 		= UploadLogs.objects.all()
-	context 	= {
-		"logs":logs
-	}
+	context 	= {"logs":logs}
 	return render(request, 'logs.html', context)
 
 

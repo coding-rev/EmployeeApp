@@ -13,18 +13,20 @@ def ValidateSupervisorCreation(get_employee_code):
 def UploadExcelAndValidation(excel_file):
 	
 	# Load spreadsheet
-	work_book 			= load_workbook(excel_file, data_only=True)
+	work_book 				= load_workbook(excel_file, data_only=True)
 	
 	# Getting the active sheet
 	rows 					= work_book.active
 	total_rows				= 0
 	succesful_rows_passed	= 0
-	# Array: specifically be used for handling duplicate entries
+
+	# Array: specifically to be used for handling duplicate entries
 	duplicatedDetectArray = []
 	duplicateDetectCount  = 0 
 
 	error_message 		  = ""
 	is_error 			  = False
+
 	# Looping through number of individual row in total rows
 	for a_row in rows:
 		# Taking out the header in the excel file
@@ -35,6 +37,7 @@ def UploadExcelAndValidation(excel_file):
 		# Getting a single row's values
 		else:
 			concatenateRowValues = "".replace(' ','')
+			
 			# Getting values from row in array
 			a_row_value_array = []
 
@@ -53,6 +56,7 @@ def UploadExcelAndValidation(excel_file):
 			else:
 				first_name 				= a_row_value_array[0]
 				middle_name 			= a_row_value_array[1]
+				# Excel date entry validation
 				try:
 					if '"' not in a_row_value_array[2] and '"' not in a_row_value_array[3]:
 						is_error 			= True
@@ -61,8 +65,8 @@ def UploadExcelAndValidation(excel_file):
 						date_of_graduation		= a_row_value_array[2].strip('"')
 						date_of_graduation 		= date_of_graduation.strip("'")
 
-					date_of_employment 		= a_row_value_array[3].strip('"')
-					date_of_employment 		= date_of_employment.strip("'")
+						date_of_employment 		= a_row_value_array[3].strip('"')
+						date_of_employment 		= date_of_employment.strip("'")
 					
 				except:
 					is_error 			= True
@@ -108,7 +112,7 @@ def UploadExcelAndValidation(excel_file):
 					succesful_rows_passed+=1
 					duplicatedDetectArray.append(concatenateRowValues)
 
-				except Exception as e:
+				except:
 					is_error 		= True
 					error_message 	= "Supervisor's employee code does not exist"
 					break

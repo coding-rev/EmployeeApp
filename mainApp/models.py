@@ -1,10 +1,6 @@
 from django.db import models
 import random
 
-#======================== 
-# Models 
-# =======================
-
 # Employee code is the required argument for creating supervisor
 class Supervisors(models.Model):
 	supervisor  		= models.CharField(max_length=100)

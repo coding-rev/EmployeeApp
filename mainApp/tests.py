@@ -1,10 +1,8 @@
 import datetime
 import pytz
-from django.test import TestCase, Client
-from django.urls import reverse
+from django.test import TestCase
 from .models import Employee, Supervisors, UploadLogs
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.contrib.messages import get_messages 
+
 
 # Create your tests here.
 class ModelsTest(TestCase):
